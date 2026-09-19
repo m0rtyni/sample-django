@@ -1,0 +1,7 @@
+- name: Deploy Django application
+  hosts: webservers
+  become: true
+
+  roles:
+    - deploy
+

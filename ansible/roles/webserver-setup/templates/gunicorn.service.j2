@@ -1,0 +1,17 @@
+[Unit]
+Description=Gunicorn service for Django application
+After=network.target
+
+[Service]
+User=ec2-user
+Group=ec2-user
+WorkingDirectory=/opt/django-app
+
+ExecStart=/opt/django-app/venv/bin/gunicorn \
+          --bind 127.0.0.1:8000 \
+          hc.wsgi:application
+
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

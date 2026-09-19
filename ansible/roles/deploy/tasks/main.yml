@@ -1,0 +1,43 @@
+- name: Clone or update Django application
+  ansible.builtin.git:
+    repo: "{{ app_repo }}"
+    dest: "{{ app_directory }}"
+    version: "{{ app_branch }}"
+    force: true
+
+- name: Create Python virtual environment
+  ansible.builtin.command:
+    cmd: "python3.12 -m venv {{ venv_directory }}"
+    creates: "{{ venv_directory }}/bin/python"
+
+- name: Install Python requirements
+  ansible.builtin.pip:
+    requirements: "{{ app_directory }}/requirements.txt"
+    virtualenv: "{{ venv_directory }}"
+
+- name: Install Gunicorn
+  ansible.builtin.pip:
+    name: gunicorn
+    virtualenv: "{{ venv_directory }}"
+
+- name: Configure Django database connection
+  ansible.builtin.template:
+    src: local_settings.py.j2
+    dest: "{{ app_directory }}/hc/local_settings.py"
+    owner: ec2-user
+    group: ec2-user
+    mode: "0644"
+
+- name: Run Django database migrations
+  ansible.builtin.command:
+    cmd: "{{ venv_directory }}/bin/python manage.py migrate"
+    chdir: "{{ app_directory }}"
+  run_once: true
+
+- name: Start and enable Gunicorn
+  ansible.builtin.systemd:
+    name: gunicorn
+    state: restarted
+    enabled: true
+    daemon_reload: true
+
