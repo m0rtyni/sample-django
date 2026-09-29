@@ -1,5 +1,0 @@
-- name: Restart Gunicorn
-  become: true
-  ansible.builtin.systemd:
-    name: gunicorn
-    state: restarted

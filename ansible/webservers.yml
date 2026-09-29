@@ -1,7 +1,0 @@
-- name: Configure application web servers
-  hosts: webservers
-  become: true
-
-  roles:
-    - webserver-setup
-

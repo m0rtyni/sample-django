@@ -1,4 +1,0 @@
-postgres_db: django_db
-postgres_user: user
-postgres_password: user
-postgres_port: 5432
