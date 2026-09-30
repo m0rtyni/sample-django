@@ -1,36 +1,23 @@
-########################
-#   Terraform Outputs  #
-########################
+#####################
+# Terraform Outputs #
+#####################
 
-output "load_balancer_dns_name" {
+output "alb_dns_name" {
   description = "DNS name of the Application Load Balancer"
-  value       = aws_lb.application_load_balancer.dns_name
+  value       = aws_lb.main.dns_name
 }
 
-output "vpc_id" {
-  description = "ID of the application VPC"
-  value       = aws_vpc.application_vpc.id
+output "rds_endpoint" {
+  description = "Endpoint of the PostgreSQL RDS instance"
+  value       = aws_db_instance.postgres.address
 }
 
-#######################
-#    Ansible Files    #
-#######################
-
-resource "local_file" "db_ip" {
-  content = templatefile("${path.module}/ips.tpl", {
-    ips = [aws_instance.database.private_ip]
-  })
-
-  filename = "${path.module}/../ansible/db_ip"
+output "ecr_repository_url" {
+  description = "URL of the ECR repository"
+  value       = aws_ecr_repository.django.repository_url
 }
 
-resource "local_file" "ansible_inventory" {
-  content = templatefile("${path.module}/inventory.tpl", {
-    web_ids         = aws_instance.application[*].id
-    db_id           = aws_instance.database.id
-    aws_region      = var.aws_region
-    ssm_bucket_name = aws_s3_bucket.ansible_ssm.bucket
-  })
-
-  filename = "${path.module}/../ansible/inventory.ini"
+output "ecs_cluster_name" {
+  description = "Name of the ECS cluster"
+  value       = aws_ecs_cluster.main.name
 }
