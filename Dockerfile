@@ -14,7 +14,12 @@ RUN apt-get update \
     && apt-get purge -y --auto-remove gcc \
     && rm -rf /var/lib/apt/lists/*
 
-COPY . .
+RUN groupadd --system appgroup \
+    && useradd --system --gid appgroup --create-home appuser
+
+COPY --chown=appuser:appgroup . .
+
+USER appuser
 
 EXPOSE 8000
 
