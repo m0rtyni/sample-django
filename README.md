@@ -56,9 +56,9 @@ Docker Compose setup runs two services:
 Both services use the user-defined bridge network django-network. The application connects to PostgreSQL using DB_HOST=db.
 
 $:docker compose ps
-NAME                  IMAGE               COMMAND                  SERVICE   CREATED          STATUS                    PORTS
-sample-django-db-1    postgres:17         "docker-entrypoint.s…"   db        57 minutes ago   Up 57 minutes (healthy)   5432/tcp
-sample-django-web-1   sample-django-web   "gunicorn hc.wsgi:ap…"   web       57 minutes ago   Up 57 minutes             0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+sample-django-db-1 - Up 57 minutes (healthy) - 5432/tcp
+sample-django-web-1 - Up 57 minutes - 0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+
 $:docker compose exec web python -c "import socket; print(socket.gethostbyname('db'))"
 172.19.0.2
 
